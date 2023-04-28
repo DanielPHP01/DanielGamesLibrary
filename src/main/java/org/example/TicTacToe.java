@@ -4,17 +4,28 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.HashSet;
+import java.util.Set;
 
 public class TicTacToe extends JFrame implements ActionListener {
-    private final JButton[][] buttons;
+    private JButton[][] buttons;
     private final JLabel turnLabel;
     private int turnCount;
-    private final int BOARD_SIZE = 3;
-    private final String PLAYER_ONE = "X";
-    private final String PLAYER_TWO = "O";
+    private int BOARD_SIZE = 3;
+    private String PLAYER_ONE = "X";
+    private String PLAYER_TWO = "O";
     private boolean gameOver;
 
+    private Color turnLabelBackgroundColor = Color.WHITE;
+    private Color turnLabelForegroundColor = Color.BLACK;
+    private Color buttonForegroundColor = Color.BLACK;
+    private Set<String> playerNames = new HashSet<>();
+
     public TicTacToe() {
+        UIManager.put("Button.background", Color.BLUE);
+        UIManager.put("Button.foreground", Color.WHITE);
+        UIManager.put("Button.font", new Font("Arial", Font.BOLD, 16));
+        UIManager.put("Button.border", BorderFactory.createLineBorder(Color.WHITE, 2));
         setTitle("Tic Tac Toe");
         setSize(300, 300);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -35,6 +46,71 @@ public class TicTacToe extends JFrame implements ActionListener {
         setVisible(true);
     }
 
+    public void setPlayerNames(Set<String> names) {
+        playerNames = names;
+        if (names.size() > 0) {
+            PLAYER_ONE = names.toArray(new String[0])[0];
+            PLAYER_TWO = names.toArray(new String[0])[1];
+        }
+        turnLabel.setText("Turn: " + PLAYER_ONE);
+    }
+
+    public void setTurnLabelText(String text) {
+        turnLabel.setText(text);
+    }
+
+    public void setButtonText(int row, int col, String text) {
+        buttons[row][col].setText(text);
+    }
+
+    public void setTurnLabelBackgroundColor(Color color) {
+        turnLabelBackgroundColor = color;
+        turnLabel.setBackground(color);
+    }
+
+    public void setTurnLabelForegroundColor(Color color) {
+        turnLabelForegroundColor = color;
+        turnLabel.setForeground(color);
+    }
+
+    public void setBackgroundColor(Color color) {
+        getContentPane().setBackground(color);
+    }
+
+    public void setButtonForegroundColor(Color color) {
+        buttonForegroundColor = color;
+        for (int row = 0; row < BOARD_SIZE; row++) {
+            for (int col = 0; col < BOARD_SIZE; col++) {
+                buttons[row][col].setForeground(color);
+            }
+        }
+    }
+
+    private void setButtonColor(String name, Color color) {
+        for (int row = 0; row < BOARD_SIZE; row++) {
+            for (int col = 0; col < BOARD_SIZE; col++) {
+                JButton button = buttons[row][col];
+                if (button.getText().equals(name)) {
+                    button.setForeground(color);
+                }
+            }
+        }
+    }
+
+    public void setBoardSize(int size) {
+        BOARD_SIZE = size;
+        setSize(size * 100, size * 100);
+        setLayout(new GridLayout(size + 1, size));
+        buttons = new JButton[size][size];
+        for (int row = 0; row < size; row++) {
+            for (int col = 0; col < size; col++) {
+                buttons[row][col] = new JButton("");
+                buttons[row][col].addActionListener(this);
+                add(buttons[row][col]);
+            }
+        }
+    }
+
     public void actionPerformed(ActionEvent e) {
         if (gameOver) {
             return;
@@ -45,51 +121,67 @@ public class TicTacToe extends JFrame implements ActionListener {
         if (button.getText().equals("")) {
             if (turnCount % 2 == 0) {
                 button.setText(PLAYER_ONE);
-                turnLabel.setText("Turn: " + PLAYER_TWO);
+                setButtonColor(PLAYER_ONE, buttonForegroundColor);
+                setTurnLabelText("Turn: " + PLAYER_TWO);
             } else {
                 button.setText(PLAYER_TWO);
-                turnLabel.setText("Turn: " + PLAYER_ONE);
+                setButtonColor(PLAYER_TWO, buttonForegroundColor);
+                setTurnLabelText("Turn: " + PLAYER_ONE);
             }
-
             turnCount++;
 
-            if (checkForWin()) {
-                turnLabel.setText("Game over! " + getCurrentPlayer() + " wins!");
-                gameOver = true;
-            } else if (turnCount == BOARD_SIZE * BOARD_SIZE) {
-                turnLabel.setText("Game over! It's a tie!");
-                gameOver = true;
-            }
+            checkForWinner();
         }
     }
 
-    private boolean checkForWin() {
-        // check rows
+    private void checkForWinner() {
+        // Check rows
         for (int row = 0; row < BOARD_SIZE; row++) {
-            if (checkLine(buttons[row][0], buttons[row][1], buttons[row][2])) {
-                return true;
+            if (buttons[row][0].getText().equals(buttons[row][1].getText()) &&
+                    buttons[row][0].getText().equals(buttons[row][2].getText()) &&
+                    !buttons[row][0].getText().equals("")) {
+                endGame(buttons[row][0].getText() + " wins!");
+                return;
             }
         }
 
-        // check columns
+        // Check columns
         for (int col = 0; col < BOARD_SIZE; col++) {
-            if (checkLine(buttons[0][col], buttons[1][col], buttons[2][col])) {
-                return true;
+            if (buttons[0][col].getText().equals(buttons[1][col].getText()) &&
+                    buttons[0][col].getText().equals(buttons[2][col].getText()) &&
+                    !buttons[0][col].getText().equals("")) {
+                endGame(buttons[0][col].getText() + " wins!");
+                return;
             }
         }
 
-        // check diagonals
-        if (checkLine(buttons[0][0], buttons[1][1], buttons[2][2])) {
-            return true;
+        // Check diagonals
+        if (buttons[0][0].getText().equals(buttons[1][1].getText()) &&
+                buttons[0][0].getText().equals(buttons[2][2].getText()) &&
+                !buttons[0][0].getText().equals("")) {
+            endGame(buttons[0][0].getText() + " wins!");
+            return;
         }
 
-        return checkLine(buttons[0][2], buttons[1][1], buttons[2][0]);
+        if (buttons[0][2].getText().equals(buttons[1][1].getText()) &&
+                buttons[0][2].getText().equals(buttons[2][0].getText()) &&
+                !buttons[0][2].getText().equals("")) {
+            endGame(buttons[0][2].getText() + " wins!");
+            return;
+        }
+
+        // Check for tie
+        if (turnCount == BOARD_SIZE * BOARD_SIZE) {
+            endGame("Tie game!");
+        }
     }
 
-    private boolean checkLine(JButton b1, JButton b2, JButton b3) {
-        return !b1.getText().equals("") && b1.getText().equals(b2.getText()) && b2.getText().equals(b3.getText());
+    private void endGame(String message) {
+        setTurnLabelText(message);
+        gameOver = true;
     }
-    private String getCurrentPlayer() {
-        return turnCount % 2 == 0 ? PLAYER_ONE : PLAYER_TWO;
+
+    public static void main(String[] args) {
+        TicTacToe ticTacToe = new TicTacToe();
     }
 }
