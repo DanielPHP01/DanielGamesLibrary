@@ -12,6 +12,7 @@ public class Main {
         ticTacToe.setBackgroundColor(RED);
         Set<String> playerNames = new HashSet<>();
         playerNames.add("Aixend");
+        ticTacToe.setWindowSize(new Dimension(800, 800));
         playerNames.add("Daniel");
         ticTacToe.setTitle("This is myGame");
         ticTacToe.setButtonForegroundColor(Color.BLACK);

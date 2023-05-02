@@ -12,6 +12,9 @@ public class TicTacToe extends JFrame implements ActionListener {
     private final JLabel turnLabel;
     private int turnCount;
     private int BOARD_SIZE = 3;
+
+    private Dimension windowSize;
+    private Color winningLineColor;
     private String PLAYER_ONE = "X";
     private String PLAYER_TWO = "O";
     private boolean gameOver;
@@ -21,12 +24,17 @@ public class TicTacToe extends JFrame implements ActionListener {
     private Color buttonForegroundColor = Color.BLACK;
     private Set<String> playerNames = new HashSet<>();
 
+    private int playerOneNameSize = 16;
+    private int playerTwoNameSize = 16;
+
+
     public TicTacToe() {
         UIManager.put("Button.background", Color.BLUE);
         UIManager.put("Button.foreground", Color.WHITE);
         UIManager.put("Button.font", new Font("Arial", Font.BOLD, 16));
         UIManager.put("Button.border", BorderFactory.createLineBorder(Color.WHITE, 2));
         setTitle("Tic Tac Toe");
+        this.windowSize = new Dimension(600, 600);
         setSize(300, 300);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setLayout(new GridLayout(BOARD_SIZE + 1, BOARD_SIZE));
@@ -52,8 +60,11 @@ public class TicTacToe extends JFrame implements ActionListener {
             PLAYER_ONE = names.toArray(new String[0])[0];
             PLAYER_TWO = names.toArray(new String[0])[1];
         }
-        turnLabel.setText("Turn: " + PLAYER_ONE);
+        // Set the font size for each player name
+        turnLabel.setText("<html><font size='" + playerOneNameSize + "'>" + PLAYER_ONE +
+                "</font> vs. <font size='" + playerTwoNameSize + "'>" + PLAYER_TWO + "</font></html>");
     }
+
 
     public void setTurnLabelText(String text) {
         turnLabel.setText(text);
@@ -61,7 +72,7 @@ public class TicTacToe extends JFrame implements ActionListener {
 
     public void setButtonText(int row, int col, String text) {
         buttons[row][col].setText(text);
-    } 
+    }
 
     public void setTurnLabelBackgroundColor(Color color) {
         turnLabelBackgroundColor = color;
@@ -176,14 +187,19 @@ public class TicTacToe extends JFrame implements ActionListener {
         }
     }
 
+    public void setWindowSize(Dimension size) {
+        this.windowSize = size;
+        setSize(size);
+    }
+
+
     private void endGame(String message) {
         setTurnLabelText(message);
         JOptionPane.showMessageDialog(null, "Thank you for coming to the master class", "Thanks for playing!", JOptionPane.INFORMATION_MESSAGE);
-        gameOver =true;
-}
+        gameOver = true;
+    }
 
     public static void main(String[] args) {
         TicTacToe ticTacToe = new TicTacToe();
     }
-
 }
