@@ -61,7 +61,7 @@ public class TicTacToe extends JFrame implements ActionListener {
 
     public void setButtonText(int row, int col, String text) {
         buttons[row][col].setText(text);
-    }
+    } 
 
     public void setTurnLabelBackgroundColor(Color color) {
         turnLabelBackgroundColor = color;
@@ -178,10 +178,12 @@ public class TicTacToe extends JFrame implements ActionListener {
 
     private void endGame(String message) {
         setTurnLabelText(message);
-        gameOver = true;
-    }
+        JOptionPane.showMessageDialog(null, "Thank you for coming to the master class", "Thanks for playing!", JOptionPane.INFORMATION_MESSAGE);
+        gameOver =true;
+}
 
     public static void main(String[] args) {
         TicTacToe ticTacToe = new TicTacToe();
     }
+
 }

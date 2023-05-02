@@ -13,9 +13,11 @@ public class Main {
         Set<String> playerNames = new HashSet<>();
         playerNames.add("Aixend");
         playerNames.add("Daniel");
+        ticTacToe.setTitle("This is myGame");
         ticTacToe.setButtonForegroundColor(Color.BLACK);
         ticTacToe.setPlayerNames(playerNames);
         ticTacToe.setTurnLabelText("GO");
+        ticTacToe.setTurnLabelForegroundColor(Color.WHITE);
         ticTacToe.setVisible(true);
     }
 }
