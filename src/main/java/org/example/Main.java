@@ -5,11 +5,9 @@ import java.awt.*;
 import java.util.HashSet;
 import java.util.Set;
 
-import static java.awt.Color.RED;
-import static java.awt.Color.YELLOW;
+import static java.awt.Color.*;
 
 public class Main {
-    tRI-dANIEL01
     public static void main(String[] args) {
         TicTacToe ticTacToe = new TicTacToe();
         ticTacToe.setBackgroundColor(RED);
@@ -19,12 +17,12 @@ public class Main {
         playerNames.add("Daniel");
         ticTacToe.setButtonsColor(YELLOW);
         ticTacToe.setTitle("This is myGame");
-        ticTacToe.setButtonForegroundColor(RED);
+        ticTacToe.setButtonForegroundColor(PINK);
         ticTacToe.setPlayerNames(playerNames);
         ticTacToe.setButtonForegroundTextSize(40);
         ticTacToe.setTurnLabelText("GO");
         ticTacToe.setTurnLabelTextSize(40);
-        ticTacToe.setTurnLabelForegroundColor(Color.WHITE);
+        ticTacToe.setTurnLabelForegroundColor(Color.GREEN);
         ticTacToe.setVisible(true);
     }
 }
