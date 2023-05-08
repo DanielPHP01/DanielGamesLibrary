@@ -1,6 +1,7 @@
 package org.example;
 
 import javax.swing.*;
+import javax.swing.border.Border;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -27,12 +28,10 @@ public class TicTacToe extends JFrame implements ActionListener {
     private int playerOneNameSize = 16;
     private int playerTwoNameSize = 16;
 
+    private int turnLabelTextSize = 16;
+
 
     public TicTacToe() {
-        UIManager.put("Button.background", Color.BLUE);
-        UIManager.put("Button.foreground", Color.WHITE);
-        UIManager.put("Button.font", new Font("Arial", Font.BOLD, 16));
-        UIManager.put("Button.border", BorderFactory.createLineBorder(Color.WHITE, 2));
         setTitle("Tic Tac Toe");
         this.windowSize = new Dimension(600, 600);
         setSize(300, 300);
@@ -51,7 +50,9 @@ public class TicTacToe extends JFrame implements ActionListener {
         turnLabel = new JLabel("Turn: " + PLAYER_ONE);
         add(turnLabel);
 
+
         setVisible(true);
+
     }
 
     public void setPlayerNames(Set<String> names) {
@@ -97,13 +98,22 @@ public class TicTacToe extends JFrame implements ActionListener {
         }
     }
 
-    private void setButtonColor(String name, Color color) {
+    public void setButtonColor(String name, Color color) {
         for (int row = 0; row < BOARD_SIZE; row++) {
             for (int col = 0; col < BOARD_SIZE; col++) {
                 JButton button = buttons[row][col];
                 if (button.getText().equals(name)) {
                     button.setForeground(color);
                 }
+            }
+        }
+    }
+
+    public void setButtonsColor(Color color) {
+        for (int row = 0; row < BOARD_SIZE; row++) {
+            for (int col = 0; col < BOARD_SIZE; col++) {
+                JButton button = buttons[row][col];
+                button.setBackground(color);
             }
         }
     }
@@ -156,7 +166,7 @@ public class TicTacToe extends JFrame implements ActionListener {
             }
         }
 
-        // Check columns
+
         for (int col = 0; col < BOARD_SIZE; col++) {
             if (buttons[0][col].getText().equals(buttons[1][col].getText()) &&
                     buttons[0][col].getText().equals(buttons[2][col].getText()) &&
@@ -166,7 +176,7 @@ public class TicTacToe extends JFrame implements ActionListener {
             }
         }
 
-        // Check diagonals
+
         if (buttons[0][0].getText().equals(buttons[1][1].getText()) &&
                 buttons[0][0].getText().equals(buttons[2][2].getText()) &&
                 !buttons[0][0].getText().equals("")) {
@@ -181,7 +191,7 @@ public class TicTacToe extends JFrame implements ActionListener {
             return;
         }
 
-        // Check for tie
+
         if (turnCount == BOARD_SIZE * BOARD_SIZE) {
             endGame("Tie game!");
         }
@@ -190,6 +200,21 @@ public class TicTacToe extends JFrame implements ActionListener {
     public void setWindowSize(Dimension size) {
         this.windowSize = size;
         setSize(size);
+    }
+
+    public void setTurnLabelTextSize(int fontSize) {
+        turnLabelTextSize = fontSize;
+        Font font = turnLabel.getFont();
+        turnLabel.setFont(new Font(font.getName(), font.getStyle(), turnLabelTextSize));
+    }
+
+    public void setButtonForegroundTextSize(int size) {
+        Font font = new Font(buttons[0][0].getFont().getName(), buttons[0][0].getFont().getStyle(), size);
+        for (int row = 0; row < BOARD_SIZE; row++) {
+            for (int col = 0; col < BOARD_SIZE; col++) {
+                buttons[row][col].setFont(font);
+            }
+        }
     }
 
 
